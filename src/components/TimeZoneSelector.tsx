@@ -107,7 +107,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
     
     // Check if any abbreviation that matches the search maps to this timezone
     for (const [abbr, tz] of Object.entries(ABBREVIATION_TO_TIMEZONE)) {
-      if (abbr.includes(searchLower) && tz === timezone) {
+      if (abbr === searchLower && tz === timezone) {
         return true;
       }
     }
