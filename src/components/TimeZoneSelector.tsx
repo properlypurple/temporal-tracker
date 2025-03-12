@@ -105,14 +105,10 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
       return true;
     }
     
-    // Check if any abbreviation that matches the search maps to this timezone
-    for (const [abbr, tz] of Object.entries(ABBREVIATION_TO_TIMEZONE)) {
-      if (abbr === searchLower && tz === timezone) {
-        return true;
-      }
-    }
-    
-    return false;
+    // Check if the search term matches any abbreviation that maps to this timezone
+    return Object.entries(ABBREVIATION_TO_TIMEZONE).some(([abbr, tz]) => 
+      searchLower === abbr && tz === timezone
+    );
   });
 
   return (
