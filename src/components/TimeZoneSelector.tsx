@@ -10,7 +10,59 @@ import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const TIMEZONES = Intl.supportedValuesOf("timeZone");
+// Define a list of common timezones as a fallback
+const TIMEZONES = [
+  "UTC",
+  "Africa/Cairo",
+  "Africa/Johannesburg",
+  "Africa/Lagos",
+  "America/Anchorage",
+  "America/Bogota",
+  "America/Chicago",
+  "America/Denver",
+  "America/Halifax",
+  "America/Los_Angeles",
+  "America/Mexico_City",
+  "America/New_York",
+  "America/Phoenix",
+  "America/Santiago",
+  "America/Sao_Paulo",
+  "America/Toronto",
+  "America/Vancouver",
+  "Asia/Bangkok",
+  "Asia/Dubai",
+  "Asia/Hong_Kong",
+  "Asia/Jakarta",
+  "Asia/Jerusalem",
+  "Asia/Kolkata",
+  "Asia/Manila",
+  "Asia/Seoul",
+  "Asia/Shanghai",
+  "Asia/Singapore",
+  "Asia/Tokyo",
+  "Australia/Adelaide",
+  "Australia/Brisbane",
+  "Australia/Melbourne",
+  "Australia/Perth",
+  "Australia/Sydney",
+  "Europe/Amsterdam",
+  "Europe/Athens",
+  "Europe/Berlin",
+  "Europe/Dublin",
+  "Europe/Istanbul",
+  "Europe/London",
+  "Europe/Madrid",
+  "Europe/Moscow",
+  "Europe/Paris",
+  "Europe/Prague",
+  "Europe/Rome",
+  "Europe/Stockholm",
+  "Europe/Vienna",
+  "Europe/Zurich",
+  "Pacific/Auckland",
+  "Pacific/Fiji",
+  "Pacific/Honolulu"
+];
 
 interface TimeZoneSelectorProps {
   onSelect: (timezone: string) => void;
