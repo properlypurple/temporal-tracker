@@ -47,15 +47,8 @@ const Index = () => {
     });
   };
 
-  const handleTimeInput = (value: string) => {
-    if (!value) {
-      setSpecificTime(undefined);
-      return;
-    }
-    const [hours, minutes] = value.split(":").map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, 0, 0);
-    setSpecificTime(date);
+  const handleTimeInput = (value: Date | undefined) => {
+    setSpecificTime(value);
   };
 
   return (
@@ -73,7 +66,7 @@ const Index = () => {
               selectedTimezones={selectedTimezones}
             />
             <TimeInput
-              value={specificTime ? `${specificTime.getHours().toString().padStart(2, '0')}:${specificTime.getMinutes().toString().padStart(2, '0')}` : ""}
+              value={specificTime}
               onChange={handleTimeInput}
             />
           </div>
