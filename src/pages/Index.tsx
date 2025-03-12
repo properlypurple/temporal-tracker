@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Index = () => {
   const [selectedTimezones, setSelectedTimezones] = useState<string[]>(() => {
     const saved = localStorage.getItem("selectedTimezones");
-    return saved ? JSON.parse(saved) : ["UTC"];
+    return saved ? JSON.parse(saved) : ["Asia/Kolkata"];
   });
   
   const [currentTime, setCurrentTime] = useState(new Date());
