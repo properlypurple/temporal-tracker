@@ -1,5 +1,4 @@
-
-import { Command, CommandInput } from "@/components/ui/command";
+import { Command, CommandInput, CommandList, CommandItem } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -10,7 +9,6 @@ import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Define a list of common timezones as a fallback
 const TIMEZONES = [
   "UTC",
   "Africa/Cairo",
@@ -97,29 +95,30 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
             value={search}
             onValueChange={setSearch}
           />
-          <div className="max-h-[300px] overflow-auto">
+          <CommandList>
             {filteredTimezones.map((timezone) => (
-              <div
+              <CommandItem
                 key={timezone}
-                className={cn(
-                  "flex cursor-pointer items-center justify-between px-4 py-2 text-sm hover:bg-accent",
-                  selectedTimezones.includes(timezone) && "opacity-50"
-                )}
-                onClick={() => {
+                value={timezone}
+                onSelect={() => {
                   if (!selectedTimezones.includes(timezone)) {
                     onSelect(timezone);
                     setOpen(false);
                     setSearch("");
                   }
                 }}
+                className={cn(
+                  "flex cursor-pointer items-center justify-between",
+                  selectedTimezones.includes(timezone) && "opacity-50"
+                )}
               >
                 {timezone.replace(/_/g, " ")}
                 {selectedTimezones.includes(timezone) && (
                   <Check className="h-4 w-4" />
                 )}
-              </div>
+              </CommandItem>
             ))}
-          </div>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
