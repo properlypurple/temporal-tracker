@@ -9,6 +9,32 @@ import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Map of abbreviations to timezones
+const ABBREVIATION_TO_TIMEZONE = {
+  "et": "America/New_York",
+  "est": "America/New_York",
+  "edt": "America/New_York",
+  "ct": "America/Chicago",
+  "cst": "America/Chicago",
+  "cdt": "America/Chicago",
+  "mt": "America/Denver",
+  "mst": "America/Denver",
+  "mdt": "America/Denver",
+  "pt": "America/Los_Angeles",
+  "pst": "America/Los_Angeles",
+  "pdt": "America/Los_Angeles",
+  "ist": "Asia/Kolkata",
+  "jst": "Asia/Tokyo",
+  "gmt": "UTC",
+  "utc": "UTC",
+  "cet": "Europe/Paris",
+  "bst": "Europe/London",
+  "aest": "Australia/Sydney",
+  "aedt": "Australia/Sydney",
+  "nzst": "Pacific/Auckland",
+  "nzdt": "Pacific/Auckland"
+};
+
 const TIMEZONES = [
   "UTC",
   "Africa/Cairo",
@@ -71,49 +97,19 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const getTimezonesByAbbreviation = (abbr: string) => {
-    const abbreviationMap: Record<string, string[]> = {
-      // North America
-      "et": ["America/New_York"],
-      "est": ["America/New_York"],
-      "edt": ["America/New_York"],
-      "ct": ["America/Chicago"],
-      "cst": ["America/Chicago"],
-      "cdt": ["America/Chicago"],
-      "mt": ["America/Denver"],
-      "mst": ["America/Denver"],
-      "mdt": ["America/Denver"],
-      "pt": ["America/Los_Angeles"],
-      "pst": ["America/Los_Angeles"],
-      "pdt": ["America/Los_Angeles"],
-      // Rest of world
-      "ist": ["Asia/Kolkata"],
-      "jst": ["Asia/Tokyo"],
-      "gmt": ["UTC"],
-      "utc": ["UTC"],
-      "cet": ["Europe/Paris"],
-      "bst": ["Europe/London"],
-      "aest": ["Australia/Sydney"],
-      "aedt": ["Australia/Sydney"],
-      "nzst": ["Pacific/Auckland"],
-      "nzdt": ["Pacific/Auckland"],
-    };
-    
-    return abbreviationMap[abbr] || [];
-  };
-
   const filteredTimezones = TIMEZONES.filter((timezone) => {
     const searchLower = search.toLowerCase();
     
-    // Check if the timezone name matches the search
+    // Check if timezone name matches the search
     if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
       return true;
     }
     
-    // Check if the timezone is matched by an abbreviation
-    const matchingZones = getTimezonesByAbbreviation(searchLower);
-    if (matchingZones.includes(timezone)) {
-      return true;
+    // Check if any abbreviation that matches the search maps to this timezone
+    for (const [abbr, tz] of Object.entries(ABBREVIATION_TO_TIMEZONE)) {
+      if (abbr.includes(searchLower) && tz === timezone) {
+        return true;
+      }
     }
     
     return false;
@@ -135,7 +131,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
       <PopoverContent className="w-full p-0 md:w-[300px]">
         <Command>
           <CommandInput 
-            placeholder="Search timezone..." 
+            placeholder="Search timezone or abbreviation (ET, IST, etc)..." 
             value={search}
             onValueChange={setSearch}
           />
