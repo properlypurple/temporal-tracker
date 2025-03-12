@@ -15,7 +15,7 @@ const TimeZoneCard = ({ timezone, currentTime, specificTime, onDelete }: TimeZon
   const time = specificTime || currentTime;
   
   return (
-    <Card className="relative p-6 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90 transition-all duration-300 hover:shadow-lg">
+    <Card className="relative p-6 backdrop-blur-sm bg-card/90 transition-all duration-300 hover:shadow-lg">
       <Button
         variant="ghost"
         size="icon"
