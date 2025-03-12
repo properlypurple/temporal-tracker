@@ -71,9 +71,53 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const filteredTimezones = TIMEZONES.filter((timezone) =>
-    timezone.toLowerCase().replace(/_/g, " ").includes(search.toLowerCase())
-  );
+  const getTimezonesByAbbreviation = (abbr: string) => {
+    const abbreviationMap: Record<string, string[]> = {
+      // North America
+      "et": ["America/New_York"],
+      "est": ["America/New_York"],
+      "edt": ["America/New_York"],
+      "ct": ["America/Chicago"],
+      "cst": ["America/Chicago"],
+      "cdt": ["America/Chicago"],
+      "mt": ["America/Denver"],
+      "mst": ["America/Denver"],
+      "mdt": ["America/Denver"],
+      "pt": ["America/Los_Angeles"],
+      "pst": ["America/Los_Angeles"],
+      "pdt": ["America/Los_Angeles"],
+      // Rest of world
+      "ist": ["Asia/Kolkata"],
+      "jst": ["Asia/Tokyo"],
+      "gmt": ["UTC"],
+      "utc": ["UTC"],
+      "cet": ["Europe/Paris"],
+      "bst": ["Europe/London"],
+      "aest": ["Australia/Sydney"],
+      "aedt": ["Australia/Sydney"],
+      "nzst": ["Pacific/Auckland"],
+      "nzdt": ["Pacific/Auckland"],
+    };
+    
+    return abbreviationMap[abbr] || [];
+  };
+
+  const filteredTimezones = TIMEZONES.filter((timezone) => {
+    const searchLower = search.toLowerCase();
+    
+    // Check if the timezone name matches the search
+    if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
+      return true;
+    }
+    
+    // Check if the timezone is matched by an abbreviation
+    const matchingZones = getTimezonesByAbbreviation(searchLower);
+    if (matchingZones.includes(timezone)) {
+      return true;
+    }
+    
+    return false;
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
