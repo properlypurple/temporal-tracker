@@ -1,5 +1,5 @@
 
-import { Command } from "@/components/ui/command";
+import { Command, CommandInput } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -19,7 +19,11 @@ interface TimeZoneSelectorProps {
 
 const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [search, setSearch] = useState("");
+
+  const filteredTimezones = TIMEZONES.filter((timezone) =>
+    timezone.toLowerCase().replace(/_/g, " ").includes(search.toLowerCase())
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -36,8 +40,13 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 md:w-[300px]">
         <Command>
+          <CommandInput 
+            placeholder="Search timezone..." 
+            value={search}
+            onValueChange={setSearch}
+          />
           <div className="max-h-[300px] overflow-auto">
-            {TIMEZONES.map((timezone) => (
+            {filteredTimezones.map((timezone) => (
               <div
                 key={timezone}
                 className={cn(
@@ -48,6 +57,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
                   if (!selectedTimezones.includes(timezone)) {
                     onSelect(timezone);
                     setOpen(false);
+                    setSearch("");
                   }
                 }}
               >
