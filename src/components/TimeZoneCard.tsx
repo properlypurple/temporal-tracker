@@ -1,4 +1,3 @@
-
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 import { X, Sun, Moon, MoonStar, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -46,8 +45,20 @@ const TimeZoneCard = ({
         <X className="h-4 w-4" />
       </Button>
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{timezone.replace(/_/g, " ")}</p>
+        <p className="text-sm text-muted-foreground">{timezone.replace(/_/g, " ")}</p>
+        <p className="text-3xl font-light tracking-tight text-amber-950 dark:text-amber-100">
+          {formatInTimeZone(time, timezone, "HH:mm")}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {formatInTimeZone(time, timezone, "EEEE, MMM d")}
+        </p>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            <span>
+              {diffString} from {defaultTimezone.split("/").pop()?.replace(/_/g, " ")}
+            </span>
+          </div>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             {isDaytime ? (
               <Sun className="h-4 w-4 text-amber-500" />
@@ -56,18 +67,6 @@ const TimeZoneCard = ({
             )}
             <span>{isDaytime ? 'Day' : 'Night'}</span>
           </div>
-        </div>
-        <p className="text-3xl font-light tracking-tight text-amber-950 dark:text-amber-100">
-          {formatInTimeZone(time, timezone, "HH:mm")}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {formatInTimeZone(time, timezone, "EEEE, MMM d")}
-        </p>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground mt-2">
-          <Clock className="h-3 w-3" />
-          <span>
-            {diffString} from {defaultTimezone.split("/").pop()?.replace(/_/g, " ")}
-          </span>
         </div>
       </div>
     </Card>
