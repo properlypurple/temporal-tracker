@@ -38,7 +38,7 @@ const TIMEZONE_ABBREVIATIONS: Record<string, string[]> = {
   // Asia
   "ist": ["Asia/Kolkata"],
   "jst": ["Asia/Tokyo"],
-  "cst": ["Asia/Shanghai"],
+  "chn": ["Asia/Shanghai"], // Changed from "cst" to "chn" to avoid duplicate key
   // Australia
   "aest": ["Australia/Sydney"],
   "aedt": ["Australia/Sydney"],
