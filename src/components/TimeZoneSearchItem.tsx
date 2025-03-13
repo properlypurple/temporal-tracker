@@ -1,4 +1,3 @@
-
 import { CommandItem } from "@/components/ui/command";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,9 +18,10 @@ const TimeZoneSearchItem = ({
   return (
     <CommandItem
       value={timezone}
+      textValue={formattedName}
       onSelect={() => onSelect(timezone)}
       className={cn(
-        "flex cursor-pointer items-center justify-between",
+        "flex cursor-pointer items-center justify-between py-2",
         isSelected && "opacity-50"
       )}
     >

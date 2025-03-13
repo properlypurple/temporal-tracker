@@ -1,4 +1,3 @@
-
 import { Command, CommandInput, CommandList, CommandEmpty } from "@/components/ui/command";
 import {
   Popover,
@@ -21,6 +20,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [search, setSearch] = useState("");
 
   const filteredTimezones = filterTimezones(search, TIMEZONES);
+  console.log('Filtered timezones:', filteredTimezones); // Debug log
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -36,28 +36,31 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 md:w-[300px]">
-        <Command>
+        <Command shouldFilter={false}>
           <CommandInput 
             placeholder="Search timezone, city or abbreviation..." 
             value={search}
             onValueChange={setSearch}
           />
           <CommandList>
-            <CommandEmpty>No timezone found</CommandEmpty>
-            {filteredTimezones.map((timezone) => (
-              <TimeZoneSearchItem
-                key={timezone}
-                timezone={timezone}
-                isSelected={selectedTimezones.includes(timezone)}
-                onSelect={(value) => {
-                  if (!selectedTimezones.includes(value)) {
-                    onSelect(value);
-                    setOpen(false);
-                    setSearch("");
-                  }
-                }}
-              />
-            ))}
+            {filteredTimezones.length === 0 ? (
+              <CommandEmpty>No matching timezones found</CommandEmpty>
+            ) : (
+              filteredTimezones.map((timezone) => (
+                <TimeZoneSearchItem
+                  key={timezone}
+                  timezone={timezone}
+                  isSelected={selectedTimezones.includes(timezone)}
+                  onSelect={(value) => {
+                    if (!selectedTimezones.includes(value)) {
+                      onSelect(value);
+                      setOpen(false);
+                      setSearch("");
+                    }
+                  }}
+                />
+              ))
+            )}
           </CommandList>
         </Command>
       </PopoverContent>
