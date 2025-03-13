@@ -1,3 +1,4 @@
+
 import { Command, CommandInput, CommandList, CommandItem } from "@/components/ui/command";
 import {
   Popover,
@@ -33,6 +34,21 @@ const ABBREVIATION_TO_TIMEZONE = {
   "aedt": "Australia/Sydney",
   "nzst": "Pacific/Auckland",
   "nzdt": "Pacific/Auckland"
+};
+
+// Display names for common timezones
+const TIMEZONE_DISPLAY_NAMES: Record<string, string> = {
+  "America/New_York": "Eastern Time (ET)",
+  "America/Chicago": "Central Time (CT)",
+  "America/Denver": "Mountain Time (MT)",
+  "America/Los_Angeles": "Pacific Time (PT)",
+  "Asia/Kolkata": "India Standard Time (IST)",
+  "Asia/Tokyo": "Japan Standard Time (JST)",
+  "UTC": "Coordinated Universal Time (UTC)",
+  "Europe/Paris": "Central European Time (CET)",
+  "Europe/London": "British Summer Time (BST)",
+  "Australia/Sydney": "Australian Eastern Time (AEST/AEDT)",
+  "Pacific/Auckland": "New Zealand Time (NZST/NZDT)"
 };
 
 const TIMEZONES = [
@@ -100,16 +116,28 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const filteredTimezones = TIMEZONES.filter((timezone) => {
     const searchLower = search.toLowerCase();
     
+    // If search is empty, show all timezones
+    if (!searchLower) return true;
+    
     // Check if timezone name matches the search
     if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
       return true;
     }
     
+    // Check if the display name (if available) matches the search
+    if (TIMEZONE_DISPLAY_NAMES[timezone]?.toLowerCase().includes(searchLower)) {
+      return true;
+    }
+    
     // Check if the search term matches any abbreviation that maps to this timezone
     return Object.entries(ABBREVIATION_TO_TIMEZONE).some(([abbr, tz]) => 
-      searchLower === abbr && tz === timezone
+      abbr.includes(searchLower) && tz === timezone
     );
   });
+
+  const getTimezoneDisplayName = (timezone: string): string => {
+    return TIMEZONE_DISPLAY_NAMES[timezone] || timezone.replace(/_/g, " ");
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -132,6 +160,11 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
             onValueChange={setSearch}
           />
           <CommandList>
+            {filteredTimezones.length === 0 && (
+              <p className="py-6 text-center text-sm text-muted-foreground">
+                No timezone found.
+              </p>
+            )}
             {filteredTimezones.map((timezone) => (
               <CommandItem
                 key={timezone}
@@ -148,7 +181,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
                   selectedTimezones.includes(timezone) && "opacity-50"
                 )}
               >
-                {timezone.replace(/_/g, " ")}
+                {getTimezoneDisplayName(timezone)}
                 {selectedTimezones.includes(timezone) && (
                   <Check className="h-4 w-4" />
                 )}
