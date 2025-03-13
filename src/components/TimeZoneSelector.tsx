@@ -119,27 +119,33 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [search, setSearch] = useState("");
 
   const filteredTimezones = TIMEZONES.filter((timezone) => {
-    const searchLower = search.toLowerCase();
+    const searchLower = search.toLowerCase().trim();
     
-    // Check if the search matches the timezone directly
+    // If no search query, show all timezones
+    if (!searchLower) return true;
+    
+    // Check if the timezone name directly includes the search text
     if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
       return true;
     }
     
-    // Check if the search matches any abbreviation
+    // Check if the search term matches any abbreviation or common name
+    for (const [abbr, timezones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
+      if (abbr.toLowerCase() === searchLower && timezones.includes(timezone)) {
+        return true;
+      }
+    }
+    
+    // Check if searching for abbreviation parts (e.g., 'e' should match 'et', 'est', etc.)
     const matchingAbbreviations = Object.entries(TIMEZONE_ABBREVIATIONS)
-      .filter(([abbr]) => abbr.includes(searchLower))
-      .flatMap(([, timezones]) => timezones);
+      .filter(([abbr]) => abbr.toLowerCase().includes(searchLower))
+      .flatMap(([_, timezones]) => timezones);
       
     if (matchingAbbreviations.includes(timezone)) {
       return true;
     }
     
-    // Check if the search is an exact abbreviation that maps to this timezone
-    return Object.entries(TIMEZONE_ABBREVIATIONS)
-      .some(([abbr, timezones]) => 
-        abbr === searchLower && timezones.includes(timezone)
-      );
+    return false;
   });
 
   return (
