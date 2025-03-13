@@ -119,30 +119,37 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [search, setSearch] = useState("");
 
   const filteredTimezones = TIMEZONES.filter((timezone) => {
+    // If empty search, show all timezones
+    if (!search.trim()) return true;
+    
     const searchLower = search.toLowerCase().trim();
     
-    // If no search query, show all timezones
-    if (!searchLower) return true;
-    
-    // Check if the timezone name directly includes the search text
+    // Direct match with timezone name (America/New_York -> new york)
     if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
       return true;
     }
     
-    // Check if the search term matches any abbreviation or common name
-    for (const [abbr, timezones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
-      if (abbr.toLowerCase() === searchLower && timezones.includes(timezone)) {
+    // Check for exact matches with abbreviations (est -> America/New_York)
+    for (const [abbr, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
+      if (abbr.toLowerCase() === searchLower && matchingZones.includes(timezone)) {
         return true;
       }
     }
     
-    // Check if searching for abbreviation parts (e.g., 'e' should match 'et', 'est', etc.)
-    const matchingAbbreviations = Object.entries(TIMEZONE_ABBREVIATIONS)
-      .filter(([abbr]) => abbr.toLowerCase().includes(searchLower))
-      .flatMap(([_, timezones]) => timezones);
-      
-    if (matchingAbbreviations.includes(timezone)) {
-      return true;
+    // Check for partial matches with abbreviations (e -> et, est)
+    if (searchLower.length >= 1) {
+      for (const [abbr, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
+        if (abbr.toLowerCase().startsWith(searchLower) && matchingZones.includes(timezone)) {
+          return true;
+        }
+      }
+    }
+    
+    // Check common names like "new york" -> America/New_York
+    for (const [name, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
+      if (name.toLowerCase().includes(searchLower) && matchingZones.includes(timezone)) {
+        return true;
+      }
     }
     
     return false;
