@@ -101,20 +101,20 @@ export const TIMEZONES = [
  * Filters timezones based on a search string
  */
 export function filterTimezones(searchTerm: string, timezones: string[]): string[] {
-  console.log("filterTimezones called with:", searchTerm);
+  // console.log("filterTimezones called with:", searchTerm);
   
   // If empty search, show all timezones
   if (!searchTerm.trim()) return timezones;
   
   const searchLower = searchTerm.toLowerCase().trim();
-  console.log("Normalized search term:", searchLower);
+  // console.log("Normalized search term:", searchLower);
   
   return timezones.filter((timezone) => {
     // Direct match with timezone name (America/New_York -> new york)
     const timezoneNormalized = timezone.toLowerCase().replace(/_/g, " ");
     const directMatch = timezoneNormalized.includes(searchLower);
     if (directMatch) {
-      console.log(`Direct match found: ${timezone} contains ${searchLower}`);
+      // console.log(`Direct match found: ${timezone} contains ${searchLower}`);
       return true;
     }
     
@@ -122,7 +122,7 @@ export function filterTimezones(searchTerm: string, timezones: string[]): string
     for (const [abbr, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
       if (abbr.toLowerCase() === searchLower) {
         if (matchingZones.includes(timezone)) {
-          console.log(`Abbreviation exact match: ${searchLower} -> ${timezone}`);
+          // console.log(`Abbreviation exact match: ${searchLower} -> ${timezone}`);
           return true;
         }
       }
@@ -132,7 +132,7 @@ export function filterTimezones(searchTerm: string, timezones: string[]): string
     if (searchLower.length >= 1) {
       for (const [abbr, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
         if (abbr.toLowerCase().startsWith(searchLower) && matchingZones.includes(timezone)) {
-          console.log(`Abbreviation partial match: ${searchLower} matches start of ${abbr} -> ${timezone}`);
+          // console.log(`Abbreviation partial match: ${searchLower} matches start of ${abbr} -> ${timezone}`);
           return true;
         }
       }
@@ -141,7 +141,7 @@ export function filterTimezones(searchTerm: string, timezones: string[]): string
     // Check common names like "new york" -> America/New_York
     for (const [name, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
       if (name.toLowerCase().includes(searchLower) && matchingZones.includes(timezone)) {
-        console.log(`Common name match: ${searchLower} found in ${name} -> ${timezone}`);
+        // console.log(`Common name match: ${searchLower} found in ${name} -> ${timezone}`);
         return true;
       }
     }

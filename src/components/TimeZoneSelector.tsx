@@ -20,7 +20,7 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [search, setSearch] = useState("");
 
   const filteredTimezones = filterTimezones(search, TIMEZONES);
-  console.log('Filtered timezones:', filteredTimezones); // Debug log
+  // console.log('Filtered timezones:', filteredTimezones); // Debug log
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
