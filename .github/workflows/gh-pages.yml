@@ -41,8 +41,8 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: copy cname file
-        run: cp ./public/CNAME ./dist/
+      - name: Create CNAME file
+        run: echo "time.prpl.page" > ./dist/CNAME
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
