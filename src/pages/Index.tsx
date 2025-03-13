@@ -1,9 +1,9 @@
-
 import { useEffect, useState } from "react";
 import TimeZoneCard from "@/components/TimeZoneCard";
 import TimeZoneSelector from "@/components/TimeZoneSelector";
 import TimeInput from "@/components/TimeInput";
 import { useToast } from "@/components/ui/use-toast";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 const Index = () => {
   const [selectedTimezones, setSelectedTimezones] = useState<string[]>(() => {
@@ -65,11 +65,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950 dark:to-orange-950">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(var(--background))] to-[hsl(var(--accent)_/_0.2)] dark:from-[hsl(var(--background))] dark:to-[hsl(var(--accent)_/_0.1)]">
+      <ThemeSwitcher />
       <div className="container mx-auto px-4 py-8">
         <div className="space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-light tracking-tight text-amber-900 dark:text-amber-100">World Clock</h1>
+            <h1 className="text-4xl font-light tracking-tight text-foreground">World Clock</h1>
             <p className="text-muted-foreground">Track time across different timezones</p>
           </div>
           
