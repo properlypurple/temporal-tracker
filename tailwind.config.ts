@@ -1,7 +1,8 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
+	darkMode: ["class", '[data-theme="dark"]'],
 	content: [
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
@@ -61,6 +62,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				amber: {
+					50: '#FEF7E1',
+					100: '#FEF0C3',
+					200: '#FEE8A6',
+					300: '#FDD888',
+					400: '#FDC86A',
+					500: '#FCB84C',
+					600: '#FBA82F',
+					700: '#F9960A',
+					800: '#DB8403',
+					900: '#BD7203',
+					950: '#9E5F02',
+				},
+				orange: {
+					50: '#FFF5ED',
+					100: '#FFEBDA',
+					200: '#FFD7B5',
+					300: '#FFC391',
+					400: '#FFAF6C',
+					500: '#FF9B48',
+					600: '#FF8623',
+					700: '#FF7200',
+					800: '#DB6200',
+					900: '#BD5400',
+					950: '#9E4700',
 				}
 			},
 			borderRadius: {

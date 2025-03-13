@@ -1,4 +1,5 @@
-import { Command, CommandInput, CommandList, CommandItem } from "@/components/ui/command";
+
+import { Command, CommandInput, CommandList, CommandItem, CommandEmpty } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -9,6 +10,52 @@ import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Mapping of common abbreviations to their corresponding timezones
+const TIMEZONE_ABBREVIATIONS: Record<string, string[]> = {
+  // North America
+  "et": ["America/New_York"],
+  "est": ["America/New_York"],
+  "edt": ["America/New_York"],
+  "ct": ["America/Chicago"],
+  "cst": ["America/Chicago"],
+  "cdt": ["America/Chicago"],
+  "mt": ["America/Denver"],
+  "mst": ["America/Denver"],
+  "mdt": ["America/Denver"],
+  "pt": ["America/Los_Angeles"],
+  "pst": ["America/Los_Angeles"],
+  "pdt": ["America/Los_Angeles"],
+  "at": ["America/Halifax"],
+  "ast": ["America/Halifax"],
+  "adt": ["America/Halifax"],
+  // Europe
+  "gmt": ["Europe/London"],
+  "bst": ["Europe/London"],
+  "cet": ["Europe/Paris", "Europe/Berlin", "Europe/Rome"],
+  "cest": ["Europe/Paris", "Europe/Berlin", "Europe/Rome"],
+  "eet": ["Europe/Athens"],
+  "eest": ["Europe/Athens"],
+  // Asia
+  "ist": ["Asia/Kolkata"],
+  "jst": ["Asia/Tokyo"],
+  "cst": ["Asia/Shanghai"],
+  // Australia
+  "aest": ["Australia/Sydney"],
+  "aedt": ["Australia/Sydney"],
+  "awst": ["Australia/Perth"],
+  // Common names
+  "london": ["Europe/London"],
+  "paris": ["Europe/Paris"],
+  "new york": ["America/New_York"],
+  "los angeles": ["America/Los_Angeles"],
+  "tokyo": ["Asia/Tokyo"],
+  "sydney": ["Australia/Sydney"],
+  "india": ["Asia/Kolkata"],
+  "mumbai": ["Asia/Kolkata"],
+  "delhi": ["Asia/Kolkata"],
+};
+
+// Full list of available timezones
 const TIMEZONES = [
   "UTC",
   "Africa/Cairo",
@@ -71,9 +118,29 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const filteredTimezones = TIMEZONES.filter((timezone) =>
-    timezone.toLowerCase().replace(/_/g, " ").includes(search.toLowerCase())
-  );
+  const filteredTimezones = TIMEZONES.filter((timezone) => {
+    const searchLower = search.toLowerCase();
+    
+    // Check if the search matches the timezone directly
+    if (timezone.toLowerCase().replace(/_/g, " ").includes(searchLower)) {
+      return true;
+    }
+    
+    // Check if the search matches any abbreviation
+    const matchingAbbreviations = Object.entries(TIMEZONE_ABBREVIATIONS)
+      .filter(([abbr]) => abbr.includes(searchLower))
+      .flatMap(([, timezones]) => timezones);
+      
+    if (matchingAbbreviations.includes(timezone)) {
+      return true;
+    }
+    
+    // Check if the search is an exact abbreviation that maps to this timezone
+    return Object.entries(TIMEZONE_ABBREVIATIONS)
+      .some(([abbr, timezones]) => 
+        abbr === searchLower && timezones.includes(timezone)
+      );
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -91,11 +158,12 @@ const TimeZoneSelector = ({ onSelect, selectedTimezones }: TimeZoneSelectorProps
       <PopoverContent className="w-full p-0 md:w-[300px]">
         <Command>
           <CommandInput 
-            placeholder="Search timezone..." 
+            placeholder="Search timezone, city or abbreviation..." 
             value={search}
             onValueChange={setSearch}
           />
           <CommandList>
+            <CommandEmpty>No timezone found</CommandEmpty>
             {filteredTimezones.map((timezone) => (
               <CommandItem
                 key={timezone}
