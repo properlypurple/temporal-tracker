@@ -115,8 +115,10 @@ export function filterTimezones(searchTerm: string, timezones: string[]): string
     
     // Check for exact matches with abbreviations (est -> America/New_York)
     for (const [abbr, matchingZones] of Object.entries(TIMEZONE_ABBREVIATIONS)) {
-      if (abbr.toLowerCase() === searchLower && matchingZones.includes(timezone)) {
-        return true;
+      if (abbr.toLowerCase() === searchLower) {
+        if (matchingZones.includes(timezone)) {
+          return true;
+        }
       }
     }
     

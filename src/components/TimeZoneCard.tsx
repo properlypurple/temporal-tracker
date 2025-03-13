@@ -36,7 +36,7 @@ const TimeZoneCard = ({
   const diffString = `${diffInMinutes >= 0 ? '+' : '-'}${hoursDiff}:${minutesDiff.toString().padStart(2, '0')}`;
   
   return (
-    <Card className="relative p-6 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90 transition-all duration-300 hover:shadow-lg border-amber-100 dark:border-amber-900/30">
+    <Card className="relative p-6 backdrop-blur-sm bg-card/90 transition-all duration-300 hover:shadow-lg">
       <Button
         variant="ghost"
         size="icon"
